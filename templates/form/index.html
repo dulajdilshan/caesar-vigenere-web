@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        input[type=text], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            resize: vertical;
+        }
+
+        select, input[type=number] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            resize: vertical;
+        }
+
+        input[type=submit] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+
+        button {
+            background-color: #e7e7e7;
+            color: black;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: darkgray;
+        }
+
+        .container {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+    </style>
+    <title>Plaintext to Ciphertext</title>
+</head>
+<body>
+
+<h3>Plaintext to Ciphertext</h3>
+
+<div class="container">
+    <form action="/action_page.php">
+
+        <label for="country">Encryption method</label>
+        <select id="selection" name="encrypt-method" required onchange="hideOtherMethod(); disableDecrypt()">
+            <option id="op_caesar" value="caesar">Caesar</option>
+            <option id="op_vigenere" value="vigenere">Vigenere</option>
+        </select>
+
+        <label class="rot">Rotate by: <input class="rot" name="rot" type="number" value="{{ rot }}" id="rot"
+                                             oninput="disableDecrypt()"></label>
+        <br/>
+        <label for="key">Key</label>
+        <input type="text" id="key" name="key" value="{{ key }}"
+               placeholder="letters only please" oninput="disableDecrypt()" pattern="[A-Za-z]{2,}"
+               title="At least two letters, no spaces or special characters. A one letter Vigenere key is just a caesar shift.">
+
+        <label for="plaintext">Plain Text</label>
+        <textarea id="plaintext" name="plaintext" placeholder="Enter message to encrypt here..."
+                  oninput="disableDecrypt()" style="height:200px">{{ plaintext }} </textarea>
+
+        <input type="submit" value="Encrypt">
+        <button id="decrypt" name="decrypt" value=1>Decrypt</button>
+
+        <button id="loadlast" name="loadlast" value=2>Load Last</button>
+        <button id="bruteforce" name="bruteforce" value=3>Perform Brute Force Attack</button>
+        <br/><br/>
+        <label for="ciphertext">Cipher Text</label>
+        <textarea id="ciphertext" name="ciphertext" placeholder="Enter message to decrypt here..."
+                  oninput="disableDecrypt()" style="height:200px">{{ ciphertext }}</textarea>
+
+        <button id="save" name="save" value=4>save</button>
+    </form>
+
+    <script type="text/javascript">
+        var selection = document.getElementById("selection");
+        var rot_el = document.getElementById("rot");
+        var r = rot_el.value;
+        var text_el = document.getElementById("text");
+        var t = text_el.value;
+        var key_el = document.getElementById("key");
+        var k = key_el.value;
+        var last_method = "{{last_method}}";
+
+        rot_class = document.getElementsByClassName("rot");
+        key_class = document.getElementsByClassName("key");
+
+        if (last_method == "caesar") {
+            op_caesar.selected = true
+        } else if (last_method == "vigenere") {
+            op_vigenere.selected = true
+        } else {
+            last_method = "caesar"
+        }
+        hideOtherMethod();
+
+        function disableDecrypt() {
+            try {
+                var new_r = rot_el.value;
+                var new_t = text_el.value;
+                var new_k = key_el.value;
+                var new_sel = selection.value;
+                if (r != new_r || t != new_t || k != new_k || last_method != new_sel) {
+                    document.getElementById("decrypt").disabled = true;
+                } else {
+                    document.getElementById("decrypt").disabled = false;
+                }
+            } catch (TypeError) {
+            }
+        }
+
+        function hideOtherMethod() {
+            var method = selection.value;
+            if (method == "caesar") {
+                for (i = 0; i < key_class.length; i++) {
+                    key_class[i].hidden = true;
+                    rot_class[i].hidden = false;
+                }
+                key_el.required = false;
+                rot_el.required = true;
+            } else if (method == "vigenere") {
+                for (i = 0; i < rot_class.length; i++) {
+                    rot_class[i].hidden = true;
+                    key_class[i].hidden = false;
+                }
+                rot_el.required = false;
+                key_el.required = true;
+            }
+        }
+    </script>
+</div>
+
+</body>
+</html>
