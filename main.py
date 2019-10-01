@@ -16,8 +16,8 @@ class User(db.Model):
 
 
 # db.create_all()
-admin = User(username='admin', email='admin@example.com')
-guest = User(username='guest', email='guest@example.com')
+# admin = User(username='admin', email='admin@example.com')
+# guest = User(username='guest', email='guest@example.com')
 # db.session.add(admin)
 # db.session.commit()
 
@@ -32,3 +32,6 @@ def index():
 def register():
     return render_template('register.html')
 
+
+if __name__ == '__main__':
+    app.run()
