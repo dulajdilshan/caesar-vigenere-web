@@ -76,12 +76,13 @@
             border: none;
             transition: all 0.4s ease 0s;
         }
+
         .example_a:hover {
             background: #434343;
             letter-spacing: 1px;
-            -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
-            -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
-            box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+            -webkit-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+            -moz-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+            box-shadow: 5px 40px -10px rgba(0, 0, 0, 0.57);
             transition: all 0.4s ease 0s;
         }
     </style>
@@ -97,6 +98,7 @@
         <select id="selection" name="encrypt-method" required onchange="hideOtherMethod(); disableDecrypt()">
             <option id="op_caesar" value="caesar">Caesar</option>
             <option id="op_vigenere" value="vigenere">Vigenere</option>
+            <option id="op_mono" value="mono">Mono-Alphabetic</option>
         </select>
 
         <label class="rot">Rotate by: <input class="rot" name="rot" type="number" value="{{ rot }}" id="rot"
@@ -105,25 +107,32 @@
         <label class="key">Key</label>
         <input type="text" class="key" id="key" name="key" value="{{ key }}"
                maxlength="32" placeholder="letters only please" oninput="disableDecrypt()" pattern="[A-Za-z]{2,}"
-               onkeydown="return alphaOnly(event);" title="At least two letters, no spaces or special characters. A one letter Vigenere key is just a caesar shift.">
+               onkeydown="return alphaOnly(event);"
+               title="At least two letters, no spaces or special characters. A one letter Vigenere key is just a caesar shift.">
+
+        <label class="alph">Alphabet Used for Mono-Alphabetic Cipher</label>
+        <input type="text" class="alph" id="alph" name="alph" value="{{ alpha }}" disabled>
 
         <label for="plaintext">Plain Text</label>
         <textarea id="plaintext" name="plaintext" placeholder="Enter message to encrypt here..."
-                  onkeydown="return alphaOnly(event);" maxlength="255" oninput="disableDecrypt()" pattern="[A-Za-z]{2,}" style="height:100px">{{ plaintext }}</textarea>
+                  onkeydown="return alphaOnly(event);" maxlength="255" oninput="disableDecrypt()" pattern="[A-Za-z]{2,}"
+                  style="height:100px">{{ plaintext }}</textarea>
 
         <input type="submit" id="encrypt_button" name="submit_button" value="Encrypt"/>
         <input type="submit" id="decrypt_button" name="submit_button" value="Decrypt"/>
 
-        <input type="submit" id="loadlast" name="submit_button" value="Load Last"/>
+        <input type="submit" id="loadlast" name="submit_button" onClick="makeOkay();" value="Load Last"/>
         <br/><br/>
         <label for="ciphertext">Cipher Text</label>
         <textarea id="ciphertext" name="ciphertext" placeholder="Enter message to decrypt here..."
-                  onkeydown="return alphaOnly(event);" maxlength="255" pattern="[A-Za-z]{2,}" oninput="disableDecrypt()" style="height:100px">{{ ciphertext }}</textarea>
+                  onkeydown="return alphaOnly(event);" maxlength="255" pattern="[A-Za-z]{2,}" oninput="disableDecrypt()"
+                  style="height:100px">{{ ciphertext }}</textarea>
 
         <input type="submit" id="save_button" name="submit_button" value="Save"/>
     </form>
 
     <script type="text/javascript">
+        var msg = "{{ msg }}";
         var l_text = "{{ l_text }}";
         var l_ciphertext = "{{ l_ciphertext }}";
         var l_key = "{{ l_key }}";
@@ -145,15 +154,21 @@
 
         rot_class = document.getElementsByClassName("rot");
         key_class = document.getElementsByClassName("key");
-
+        alph_class = document.getElementsByClassName("alph");
         if (last_method == "caesar") {
             op_caesar.selected = true;
         } else if (last_method == "vigenere") {
             op_vigenere.selected = true
+        } else if (last_method == "mono") {
+            op_mono.selected = true;
         } else {
-            last_method = "caesar"
+            last_method = "caesar";
         }
         hideOtherMethod();
+
+        if (msg){
+            alert(msg);
+        }
 
         function disableDecrypt() {
             try {
@@ -170,12 +185,8 @@
             }
         }
 
-        function fillWithTheLast() {
-            selection.selected.id = "op_" + l_method;
-            plaintext.value = l_text;
-            key_el.value = l_key;
-            rot_el.value = l_rot;
-            ciphertext.value = l_ciphertext;
+        function makeOkay() {
+            key_el.required = false;
 
         }
 
@@ -185,6 +196,7 @@
                 for (i = 0; i < key_class.length; i++) {
                     key_class[i].hidden = true;
                     rot_class[i].hidden = false;
+                    alph_class[i].hidden = true;
                 }
                 key_el.required = false;
                 rot_el.required = true;
@@ -192,17 +204,29 @@
                 for (i = 0; i < rot_class.length; i++) {
                     rot_class[i].hidden = true;
                     key_class[i].hidden = false;
+                    alph_class[i].hidden = true;
                 }
                 rot_el.required = false;
                 key_el.required = true;
+            } else if (method == "mono") {
+                for (i = 0; i < rot_class.length; i++) {
+                    rot_class[i].hidden = true;
+                    key_class[i].hidden = true;
+                    alph_class[i].hidden = false;
+                }
+                rot_el.required = false;
+                key_el.required = false;
             }
         }
+
         function alphaOnly(event) {
             var key = event.keyCode;
             return ((key >= 65 && key <= 90) || key == 8);
         };
     </script>
 </div>
-<div class="button_cont" align="center"><a class="example_b" href="/bruteforce" target="_blank" rel="nofollow noopener">Go to Brute Force Attack</a></div>
+<br/><br/>
+<div class="button_cont" align="center"><a class="example_b" href="/bruteforce" target="_blank" rel="nofollow noopener">Go
+    to Brute Force Attack</a></div>
 </body>
 </html>
