@@ -64,13 +64,32 @@
             background-color: #f2f2f2;
             padding: 20px;
         }
+
+        .example_b {
+            color: #fff !important;
+            text-transform: uppercase;
+            text-decoration: none;
+            background: #60a3bc;
+            padding: 20px;
+            border-radius: 50px;
+            display: inline-block;
+            border: none;
+            transition: all 0.4s ease 0s;
+        }
+        .example_a:hover {
+            background: #434343;
+            letter-spacing: 1px;
+            -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+            -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+            box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+            transition: all 0.4s ease 0s;
+        }
     </style>
     <title>Plaintext to Ciphertext</title>
 </head>
 <body>
 
 <h3>Plaintext to Ciphertext</h3>
-
 <div class="container">
     <form id="form" method="post">
 
@@ -86,21 +105,20 @@
         <label class="key">Key</label>
         <input type="text" class="key" id="key" name="key" value="{{ key }}"
                maxlength="32" placeholder="letters only please" oninput="disableDecrypt()" pattern="[A-Za-z]{2,}"
-               title="At least two letters, no spaces or special characters. A one letter Vigenere key is just a caesar shift.">
+               onkeydown="return alphaOnly(event);" title="At least two letters, no spaces or special characters. A one letter Vigenere key is just a caesar shift.">
 
         <label for="plaintext">Plain Text</label>
         <textarea id="plaintext" name="plaintext" placeholder="Enter message to encrypt here..."
-                  maxlength="255" oninput="disableDecrypt()" style="height:200px">{{ plaintext }}</textarea>
+                  onkeydown="return alphaOnly(event);" maxlength="255" oninput="disableDecrypt()" pattern="[A-Za-z]{2,}" style="height:100px">{{ plaintext }}</textarea>
 
         <input type="submit" id="encrypt_button" name="submit_button" value="Encrypt"/>
         <input type="submit" id="decrypt_button" name="submit_button" value="Decrypt"/>
 
         <input type="submit" id="loadlast" name="submit_button" value="Load Last"/>
-        <button id="bruteforce" name="bruteforce" value=3>Perform Brute Force Attack</button>
         <br/><br/>
         <label for="ciphertext">Cipher Text</label>
         <textarea id="ciphertext" name="ciphertext" placeholder="Enter message to decrypt here..."
-                  maxlength="255" oninput="disableDecrypt()" style="height:200px">{{ ciphertext }}</textarea>
+                  onkeydown="return alphaOnly(event);" maxlength="255" pattern="[A-Za-z]{2,}" oninput="disableDecrypt()" style="height:100px">{{ ciphertext }}</textarea>
 
         <input type="submit" id="save_button" name="submit_button" value="Save"/>
     </form>
@@ -179,8 +197,12 @@
                 key_el.required = true;
             }
         }
+        function alphaOnly(event) {
+            var key = event.keyCode;
+            return ((key >= 65 && key <= 90) || key == 8);
+        };
     </script>
 </div>
-
+<div class="button_cont" align="center"><a class="example_b" href="/bruteforce" target="_blank" rel="nofollow noopener">Go to Brute Force Attack</a></div>
 </body>
 </html>

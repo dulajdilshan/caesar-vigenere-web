@@ -71,9 +71,12 @@ def home():
                            l_text=text,
                            l_ciphertext=ciphertext, l_key=key, l_rot=rot, l_method=method)
 
+# TODO: Monoalphabetic Cipher
+# TODO: Bruteforce Attack
+
 
 @app.route('/', methods=['POST'])
-def handle_post():
+def home_post():
     decrypt_pressed = False
     text = request.form['plaintext']
     rot = int(request.form['rot'])
@@ -132,6 +135,26 @@ def handle_post():
     #         else vigenere_decrypt(text, key)
     # return render_template('form/index.html', plaintext=text, ciphertext=cipher, rot=rot, key=key,
     #                        decrypt_hide=decrypt_pressed, last_method=method)
+
+
+answers = ["Pikachu", "Charizard", "Squirtle", "Jigglypuff",
+           "Bulbasaur", "Gengar", "Charmander", "Mew", "Lugia", "Gyarados"]
+
+Ducks = []
+@app.route('/bruteforce')
+def bruteforce():
+    return render_template("form/index2.html", len=len(Ducks), answers=Ducks)
+
+
+@app.route('/bruteforce', methods=['POST'])
+def bruteforce_done():
+    plaintexts = []
+    ciphertext = request.form['cipher32']
+    rot = 0
+    for i in range(0, 26):
+        text = caesar_encrypt(ciphertext, abs(26 - i))
+        plaintexts.append(text)
+    return render_template("form/index2.html", cipher32=ciphertext, len=len(plaintexts), answers=plaintexts)
 
 
 # @app.route('/')

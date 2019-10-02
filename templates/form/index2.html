@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        input[type=text], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            resize: vertical;
+        }
+
+        select, input[type=number] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            resize: vertical;
+        }
+
+        input[type=submit] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+
+        button {
+            background-color: #e7e7e7;
+            color: black;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: darkgray;
+        }
+
+        .container {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+    </style>
+    <title>Plaintext to Ciphertext</title>
+</head>
+<body>
+	<h1>Brute-Force Attack: For Shift Cipher</h1>
+	<form id="form" method="post">
+	<label for="ciphecipher32rtext">Cipher Text</label>
+	<input type="text" class="cipher32" id="cipher32" name="cipher32" value="{{ cipher32 }}"
+               maxlength="32" placeholder="letters only please" oninput="disableDecrypt()" pattern="[A-Za-z]{2,}"
+               title="At least two letters, no spaces or special characters. A one letter Vigenere key is just a caesar shift."/>
+	<br/>
+	<input type="submit" id="encrypt_button" name="submit_button" value="Attack"/>
+
+	<h3>These are the possible plaintext for "{{cipher32}}"</h3>
+	<ol> 
+	<!-- For loop logic of jinja template -->
+		{%for i in range(0, len)%} 
+			<li>{{answers[i]}}</li> 
+		{%endfor%} 
+	</ol> 
+	</form>
+</body>
+</html>
