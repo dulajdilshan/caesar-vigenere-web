@@ -9,6 +9,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@127.0.0.1:3306/cvw_db'
 db = SQLAlchemy(app)
 
+
 class Cipher(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     plaintext = db.Column(db.String(255), nullable=False)
@@ -20,6 +21,7 @@ class Cipher(db.Model):
 
     def __repr__(self):
         return '<Cipher %r>' % self.id
+
 
 @app.route('/')
 def home():
