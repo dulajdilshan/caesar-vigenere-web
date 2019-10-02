@@ -50,6 +50,8 @@ class Cipher(db.Model):
 
 @app.route('/')
 def home():
+    lcipher = Cipher.query.all()
+    print lcipher[len(lcipher) - 1].id
     return render_template('form/index.html', plaintext='', ciphertext='', rot=0, key='', decrypt_hide=True)
 
 
@@ -95,25 +97,6 @@ def handle_post():
     # return render_template('form/index.html', plaintext=text, ciphertext=cipher, rot=rot, key=key,
     #                        decrypt_hide=decrypt_pressed, last_method=method)
 
-
-def handle_encrypt():
-    return 0
-
-
-def handle_decrypt():
-    return 0
-
-
-def handle_save():
-    return 0
-
-
-def handle_bruteforce():
-    pass
-
-
-def handle_loadlast():
-    pass
 
 
 if __name__ == '__main__':
