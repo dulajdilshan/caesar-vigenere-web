@@ -72,7 +72,7 @@
 <h3>Plaintext to Ciphertext</h3>
 
 <div class="container">
-    <form id="caesar" method="post">
+    <form id="form" method="post">
 
         <label for="country">Encryption method</label>
         <select id="selection" name="encrypt-method" required onchange="hideOtherMethod(); disableDecrypt()">
@@ -95,7 +95,7 @@
         <input type="submit" id="encrypt_button" name="submit_button" value="Encrypt"/>
         <input type="submit" id="decrypt_button" name="submit_button" value="Decrypt"/>
 
-        <button id="loadlast" name="loadlast" value=2>Load Last</button>
+        <input type="submit" id="loadlast" name="submit_button" value="Load Last"/>
         <button id="bruteforce" name="bruteforce" value=3>Perform Brute Force Attack</button>
         <br/><br/>
         <label for="ciphertext">Cipher Text</label>
@@ -106,6 +106,14 @@
     </form>
 
     <script type="text/javascript">
+        var l_text = "{{ l_text }}";
+        var l_ciphertext = "{{ l_ciphertext }}";
+        var l_key = "{{ l_key }}";
+        var l_rot = "{{ l_rot }}";
+        var l_method = "{{ l_method }}";
+
+        console.log(l_text);
+
         var selection = document.getElementById("selection");
         var rot_el = document.getElementById("rot");
         var r = rot_el.value;
@@ -142,6 +150,15 @@
                 }
             } catch (TypeError) {
             }
+        }
+
+        function fillWithTheLast() {
+            selection.selected.id = "op_" + l_method;
+            plaintext.value = l_text;
+            key_el.value = l_key;
+            rot_el.value = l_rot;
+            ciphertext.value = l_ciphertext;
+
         }
 
         function hideOtherMethod() {

@@ -23,6 +23,7 @@ class Cipher(db.Model):
     plaintext = db.Column(db.String(255), nullable=False)
     key = db.Column(db.String(32), nullable=True)
     method = db.Column(db.String(10), nullable=False)
+    cipher = db.Column(db.String(255), nullable=False)
     nochar = db.Column(db.Integer, nullable=True)
     rotby = db.Column(db.Integer, nullable=True)
 
@@ -50,9 +51,25 @@ class Cipher(db.Model):
 
 @app.route('/')
 def home():
-    lcipher = Cipher.query.all()
-    print lcipher[len(lcipher) - 1].id
-    return render_template('form/index.html', plaintext='', ciphertext='', rot=0, key='', decrypt_hide=True)
+    cipher_list = Cipher.query.all()
+    if len(cipher_list) > 0:
+        last_cipher = cipher_list[len(cipher_list) - 1]
+        text = ""
+        ciphertext = last_cipher.cipher
+        key = last_cipher.key
+        rot = last_cipher.rotby
+        method = last_cipher.method
+    else:
+        text = ''
+        ciphertext = ''
+        key = ''
+        rot = 0
+        method = ''
+    # return render_template('form/index.html', plaintext=text, ciphertext=ciphertext, rot=rot, key=key,
+    #                            decrypt_hide=True, last_method=method)
+    return render_template('form/index.html', plaintext='', ciphertext='', rot=0, key='', decrypt_hide=True,
+                           l_text=text,
+                           l_ciphertext=ciphertext, l_key=key, l_rot=rot, l_method=method)
 
 
 @app.route('/', methods=['POST'])
@@ -64,14 +81,33 @@ def handle_post():
     method = request.form['encrypt-method']
     ciphertext = request.form['ciphertext']
     if request.form['submit_button'] == 'Encrypt':
-        ciphertext = caesar_encrypt(text, rot) if method == 'caesar' else vigenere_encrypt(text, key)
+        ciphertext = caesar_encrypt(
+            text, rot) if method == 'caesar' else vigenere_encrypt(text, key)
     elif request.form['submit_button'] == 'Decrypt':
         decrypt_pressed = True
-        text = caesar_encrypt(ciphertext, abs(26 - rot)) if method == 'caesar' else vigenere_decrypt(ciphertext, key)
+        text = caesar_encrypt(ciphertext, abs(
+            26 - rot)) if method == 'caesar' else vigenere_decrypt(ciphertext, key)
+    elif request.form['submit_button'] == 'Load Last':
+        cipher_list = Cipher.query.all()
+        if len(cipher_list) > 0:
+            last_cipher = cipher_list[len(cipher_list) - 1]
+            text = ""
+            ciphertext = last_cipher.cipher
+            key = last_cipher.key
+            rot = last_cipher.rotby
+            method = last_cipher.method
+        else:
+            text = ''
+            ciphertext = ''
+            key = ''
+            rot = 0
+            method = ''
+        return render_template('form/index.html', plaintext=text, ciphertext=ciphertext, rot=rot, key=key, decrypt_hide=True, last_method=method)
     elif request.form['submit_button'] == 'Save':
         # Check for validity
         if ciphertext == caesar_encrypt(text, rot) if method == 'caesar' else vigenere_encrypt(text, key):
-            new_cipher = Cipher(plaintext=text, method=method, key=key, nochar=len(text), rotby=rot)
+            new_cipher = Cipher(plaintext=text, cipher=ciphertext,
+                                method=method, key=key, nochar=len(text), rotby=rot)
             db.session.add(new_cipher)
             db.session.commit()
             return render_template('form/index.html', plaintext='', ciphertext='', rot=0, key='', decrypt_hide=True)
@@ -97,6 +133,25 @@ def handle_post():
     # return render_template('form/index.html', plaintext=text, ciphertext=cipher, rot=rot, key=key,
     #                        decrypt_hide=decrypt_pressed, last_method=method)
 
+
+# @app.route('/')
+# def get_last():
+#     cipher_list = Cipher.query.all()
+#     if len(cipher_list) > 0:
+#         last_cipher = cipher_list[len(cipher_list) - 1]
+#         text = ""
+#         ciphertext = last_cipher.cipher
+#         key = last_cipher.key
+#         rot = last_cipher.rotby
+#         method = last_cipher.method
+#     else:
+#         text = ""
+#         ciphertext = ""
+#         key = ""
+#         rot = ""
+#         method = ""
+#     return render_template('form/index.html', plaintext=text, ciphertext=ciphertext, rot=rot, key=key,
+#                            decrypt_hide=True, last_method=method)
 
 
 if __name__ == '__main__':
