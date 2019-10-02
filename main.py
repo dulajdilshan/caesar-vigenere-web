@@ -30,7 +30,8 @@ class Cipher(db.Model):
         return '<Cipher %r>' % self.id
 
 
-db.create_all()  # create all the tables
+# db.create_all()  # create all the tables
+# cipher = Cipher(plaintext="", method="", key="", nochar="", rotby="")
 
 
 # db.create_all()
@@ -48,7 +49,7 @@ db.create_all()  # create all the tables
 
 
 @app.route('/')
-def register():
+def home():
     return render_template('form/index.html', plaintext='', ciphertext='', rot=0, key='', decrypt_hide=True)
 
 
@@ -59,16 +60,23 @@ def handle_post():
     rot = int(request.form['rot'])
     key = request.form['key']
     method = request.form['encrypt-method']
-    cipher = request.form['ciphertext']
+    ciphertext = request.form['ciphertext']
     if request.form['submit_button'] == 'Encrypt':
-        cipher = caesar_encrypt(text, rot) if method == 'caesar' else vigenere_encrypt(text, key)
+        ciphertext = caesar_encrypt(text, rot) if method == 'caesar' else vigenere_encrypt(text, key)
     elif request.form['submit_button'] == 'Decrypt':
         decrypt_pressed = True
-        text = caesar_encrypt(cipher, abs(26 - rot)) if method == 'caesar' else vigenere_decrypt(cipher, key)
+        text = caesar_encrypt(ciphertext, abs(26 - rot)) if method == 'caesar' else vigenere_decrypt(ciphertext, key)
     elif request.form['submit_button'] == 'Save':
-        pass
+        # Check for validity
+        if ciphertext == caesar_encrypt(text, rot) if method == 'caesar' else vigenere_encrypt(text, key):
+            new_cipher = Cipher(plaintext=text, method=method, key=key, nochar=len(text), rotby=rot)
+            db.session.add(new_cipher)
+            db.session.commit()
+            return render_template('form/index.html', plaintext='', ciphertext='', rot=0, key='', decrypt_hide=True)
+        else:
+            return "Invalid Cipher and Plaintext"
 
-    return render_template('form/index.html', plaintext=text, ciphertext=cipher, rot=rot, key=key,
+    return render_template('form/index.html', plaintext=text, ciphertext=ciphertext, rot=rot, key=key,
                            decrypt_hide=decrypt_pressed, last_method=method)
 
     # try:
