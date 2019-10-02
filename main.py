@@ -61,10 +61,7 @@ def handle_post():
     method = request.form['encrypt-method']
     cipher = request.form['ciphertext']
     if request.form['submit_button'] == 'Encrypt':
-        if len(text) <= 255:
-            cipher = caesar_encrypt(text, rot) if method == 'caesar' else vigenere_encrypt(text, key)
-        else:
-            pass
+        cipher = caesar_encrypt(text, rot) if method == 'caesar' else vigenere_encrypt(text, key)
     elif request.form['submit_button'] == 'Decrypt':
         decrypt_pressed = True
         text = caesar_encrypt(cipher, abs(26 - rot)) if method == 'caesar' else vigenere_decrypt(cipher, key)
