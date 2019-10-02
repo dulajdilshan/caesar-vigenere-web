@@ -57,9 +57,6 @@ def home():
     return render_template('form/index.html', plaintext='', ciphertext='', rot=0, key='', decrypt_hide=True)
 
 
-# TODO: Monoalphabetic Cipher
-
-
 @app.route('/', methods=['POST'])
 def home_post():
     decrypt_pressed = False
