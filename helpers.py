@@ -2,7 +2,7 @@ from string import ascii_lowercase as lowers
 
 
 def alphabet_position(letter):
-    assert len(letter) == 1, 'Only give me one letter please'
+    assert len(letter) == 1, 'One letter please'
     return lowers.index(letter.lower())
 
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
@@ -72,7 +72,7 @@
 <h3>Plaintext to Ciphertext</h3>
 
 <div class="container">
-    <form action="/action_page.php">
+    <form id="caesar" method="post">
 
         <label for="country">Encryption method</label>
         <select id="selection" name="encrypt-method" required onchange="hideOtherMethod(); disableDecrypt()">
@@ -85,24 +85,24 @@
         <br/>
         <label class="key">Key</label>
         <input type="text" class="key" id="key" name="key" value="{{ key }}"
-               placeholder="letters only please" oninput="disableDecrypt()" pattern="[A-Za-z]{2,}"
+               maxlength="32" placeholder="letters only please" oninput="disableDecrypt()" pattern="[A-Za-z]{2,}"
                title="At least two letters, no spaces or special characters. A one letter Vigenere key is just a caesar shift.">
 
         <label for="plaintext">Plain Text</label>
         <textarea id="plaintext" name="plaintext" placeholder="Enter message to encrypt here..."
-                  oninput="disableDecrypt()" style="height:200px">{{ plaintext }} </textarea>
+                  maxlength="255" oninput="disableDecrypt()" style="height:200px">{{ plaintext }}</textarea>
 
-        <input type="submit" value="Encrypt">
-        <button id="decrypt" name="decrypt" value=1>Decrypt</button>
+        <input type="submit" id="encrypt_button" name="submit_button" value="Encrypt"/>
+        <input type="submit" id="decrypt_button" name="submit_button" value="Decrypt"/>
 
         <button id="loadlast" name="loadlast" value=2>Load Last</button>
         <button id="bruteforce" name="bruteforce" value=3>Perform Brute Force Attack</button>
         <br/><br/>
         <label for="ciphertext">Cipher Text</label>
         <textarea id="ciphertext" name="ciphertext" placeholder="Enter message to decrypt here..."
-                  oninput="disableDecrypt()" style="height:200px">{{ ciphertext }}</textarea>
+                  maxlength="255" oninput="disableDecrypt()" style="height:200px">{{ ciphertext }}</textarea>
 
-        <button id="save" name="save" value=4>save</button>
+        <input type="submit" id="save_button" name="submit_button" value="Save"/>
     </form>
 
     <script type="text/javascript">
