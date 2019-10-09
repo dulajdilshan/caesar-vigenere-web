@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Vigenere Cipher | My Cipher</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+    <style>
+        .navigation {
+            padding: 20px;
+            background-color: burlywood;
+            color: darkslateblue;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="navigation" align="center"><h3>
+        <a class="" href="/caesar">Caesar Cipher</a> |
+        <a class="" href="/vigenere">Vigenere Cipher</a> |
+        <a class="" href="/mono">Mono-Alphabetic</a> |
+        <a class="" href="/bruteforce">Brute Force Attack</a>
+    </h3></div>
+    <h2>Vigenere Cipher</h2>
+    <form class="form-horizontal" id="form" method="post">
+        <div class="form-group" id="key">
+            <label class="control-label col-sm-2">Key</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="key" name="key" value="{{ key }}"
+                       maxlength="32" placeholder="letters only please" pattern="[A-Za-z]{2,}"
+                       onkeydown="return alphaOnly(event);"
+                       title="At least two letters, no spaces or special characters. A one letter Vigenere key is just a caesar shift.">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="plaintext">Plain Text</label>
+            <div class="col-sm-10">
+                <textarea class="form-control rounded-0" id="text" name="text"
+                          placeholder="Enter message to encrypt here..."
+                          onkeydown="return alphaOnly(event);" maxlength="255" pattern="[A-Za-z]{2,}"
+                          style="height:100px">{{ text }}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-default" type="submit" id="encrypt_button" name="submit_button"
+                        value="Encrypt">Encrypt
+                </button>
+                <button type="submit" class="btn btn-default" id="decrypt_button" name="submit_button"
+                        value="Decrypt">Decrypt
+                </button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="enc_text">Encrypted Text</label>
+            <div class="col-sm-10">
+                <textarea class="form-control rounded-0" id="enc_text" name="enc_text"
+                          placeholder="Enter message to decrypt here..."
+                          onkeydown="return alphaOnly(event);" maxlength="255" pattern="[A-Za-z]{2,}"
+                          style="height:100px">{{ enc_text }}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default" id="save_button" name="submit_button"
+                        value="Save">Save
+                </button>
+                <button type="submit" class="btn btn-default" id="loadlast" name="submit_button" onClick="makeOkay();"
+                        value="Load Last">Load Last
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    function alphaOnly(event) {
+        let key = event.keyCode;
+        return ((key >= 65 && key <= 90) || key == 8);
+    }
+</script>
+
+</body>
+</html>

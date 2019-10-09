@@ -1,11 +1,11 @@
-from helpers import rotate_character
+from assistance import rotate_character
 
 
 def encrypt(text, rot):
     return ''.join(rotate_character(char, rot) for char in text)
 
 
-def main(shift, verbose, text):
+def major_function(shift, verbose, text):
     msg = input('Type a message:\n') if text is None else text
     while True:
         try:
@@ -29,4 +29,4 @@ if __name__ == '__main__':
                         help="increase output verbosity")
     parser.add_argument('-t', '--text', help='plaintext to encrypt', dest='text')
     args = parser.parse_args()
-    main(args.shift, args.verbose, args.text)
+    major_function(args.shift, args.verbose, args.text)

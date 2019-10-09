@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Brute Force Attack | My Cipher</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+    <style>
+        .navigation {
+            padding: 20px;
+            background-color: burlywood;
+            color: darkslateblue;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="navigation" align="center"><h3>
+        <a class="" href="/caesar">Caesar Cipher</a> |
+        <a class="" href="/vigenere">Vigenere Cipher</a> |
+        <a class="" href="/mono">Mono-Alphabetic</a> |
+        <a class="" href="/bruteforce">Brute Force Attack</a>
+    </h3></div>
+    <h2>Brute Force Attack</h2>
+    <form class="form-horizontal" id="form" method="post">
+        <div class="form-group" id="bruteforce">
+            <label class="control-label col-sm-2" for="cipher32">Cipher Text</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" id="cipher32" name="cipher32" value="{{ cipher32 }}"
+                       maxlength="32" placeholder="letters only please" pattern="[A-Za-z]{2,}"
+                       onkeydown="return alphaOnly(event);"
+                       title="At least two letters, no spaces or special characters. A one letter Vigenere key is just a caesar shift."/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-default" type="submit" id="encrypt_button" name="submit_button"
+                        value="Attack">Attack
+                </button>
+            </div>
+        </div>
+        {% if len>0 %}
+            <div class="form-group">
+
+                <h3>These are the possible plaintext for "{{ cipher32 }}"</h3>
+                <ol>
+                    {% for i in range(0, len) %}
+                        <li>{{ answers[i] }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+        {% endif %}
+    </form>
+</div>
+<script type="text/javascript">
+    function alphaOnly(event) {
+        let key = event.keyCode;
+        return ((key >= 65 && key <= 90) || key == 8);
+    }
+</script>
+
+</body>
+</html>

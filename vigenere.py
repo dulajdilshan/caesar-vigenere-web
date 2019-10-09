@@ -1,25 +1,25 @@
-from helpers import alphabet_position, rotate_character
+from assistance import alphabet_position, rotate_character
 from sys import exit
 
 
 def encrypt(text, key):
     i = 0
     key_mod = len(key)
-    ciphertext = ''
+    enc_text = ''
     for char in text:
         if char.isalpha():
-            ciphertext += rotate_character(char, alphabet_position(key[i]))
+            enc_text += rotate_character(char, alphabet_position(key[i]))
             i = (i + 1) % key_mod
         else:
-            ciphertext += char
-    return ciphertext
+            enc_text += char
+    return enc_text
 
 
-def decrypt(ciphertext, key):
+def decrypt(enc_text, key):
     i = 0
     key_mod = len(key)
     original = ''
-    for char in ciphertext:
+    for char in enc_text:
         if char.isalpha():
             original_shift = alphabet_position(key[i])
             original += rotate_character(char, -original_shift)
@@ -47,7 +47,7 @@ def main(key, verbose, plaintext):
 if __name__ == '__main__':
     import argparse
 
-    key_error = "encryption key should only contain alphabetic characters--no numbers or special characters"
+    key_error = "Key Must be Alphabetic"
 
 
     def key_parse(key):
